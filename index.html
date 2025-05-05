@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thug Coding® Ledger</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Thug Coding® – Double-Entry Accrual Ledger</h1>
+    <p>Live account tracking • Real-time balances • GAAP-compliant</p>
+    <nav>
+      <button data-tab="ledger">📒 Ledger</button>
+      <button data-tab="preview">👁️ Preview</button>
+      <button data-tab="accounts">💼 Accounts</button>
+      <button data-tab="reports">📊 Reports</button>
+      <button data-tab="settings">⚙️ Settings</button>
+      <button data-tab="chat">💬 Chat</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="ledger" class="tab">
+      <h2>Ledger Entry</h2>
+      <form id="entry-form">
+        <input type="date" id="entry-date" required />
+        <input type="text" id="entry-event" placeholder="Event (e.g. Repair Job)" required />
+        <input type="text" id="entry-account" placeholder="Primary Account" required />
+        <input type="text" id="entry-offset" placeholder="Offset Account" required />
+        <input type="number" id="entry-debit" placeholder="Debit" step="0.01" />
+        <input type="number" id="entry-credit" placeholder="Credit" step="0.01" />
+        <select id="entry-category">
+          <option value="operating">Operating</option>
+          <option value="investing">Investing</option>
+          <option value="financing">Financing</option>
+        </select>
+        <button type="submit">Add Entry</button>
+      </form>
+
+      <div id="ledger-filters">
+        <input type="date" id="filter-from" />
+        <input type="date" id="filter-to" />
+        <input type="text" id="filter-account" placeholder="Account" />
+        <input type="text" id="filter-event" placeholder="Event" />
+        <button id="apply-filters">Apply</button>
+        <button id="reset-filters">Reset</button>
+      </div>
+
+      <div id="ledger-table-container">
+        <table id="ledger-table">
+          <thead>
+            <tr><th>Date</th><th>Event</th><th>Account</th><th>Offset</th><th>Debit</th><th>Credit</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p>Total Debits: $<span id="total-debit">0.00</span> | Total Credits: $<span id="total-credit">0.00</span></p>
+      </div>
+    </section>
+
+    <section id="preview" class="tab hidden">
+      <h2>Preview Transactions</h2>
+      <div id="preview-ledger"></div>
+      <div id="preview-accounts"></div>
+      <button id="confirm-preview">Confirm & Add</button>
+    </section>
+
+    <section id="accounts" class="tab hidden">
+      <h2>Accounts</h2>
+      <form id="account-form">
+        <input type="text" id="account-name" placeholder="Account Name" required />
+        <select id="account-type">
+          <option value="asset">Asset</option>
+          <option value="liability">Liability</option>
+          <option value="equity">Equity</option>
+          <option value="revenue">Revenue</option>
+          <option value="expense">Expense</option>
+        </select>
+        <label><input type="checkbox" id="allow-negative" /> Allow Negative</label>
+        <button type="submit">Add Account</button>
+      </form>
+      <table id="accounts-table">
+        <thead><tr><th>Account</th><th>Type</th><th>Balance</th><th>Allow Negative</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="reports" class="tab hidden">
+      <h2>Reports</h2>
+      <div id="income-report">
+        <h3>Income Statement</h3>
+        <input type="date" id="income-date-from" />
+        <input type="date" id="income-date-to" />
+        <button id="generate-income">Generate</button>
+        <div id="income-statement-report"></div>
+      </div>
+
+      <div id="balance-sheet">
+        <h3>Balance Sheet</h3>
+        <input type="date" id="balance-date" />
+        <button id="generate-balance">Generate</button>
+        <div id="balance-sheet-report"></div>
+      </div>
+
+      <div id="cashflow-report">
+        <h3>Cash Flow Statement</h3>
+        <input type="date" id="cashflow-date-from" />
+        <input type="date" id="cashflow-date-to" />
+        <button id="generate-cashflow">Generate</button>
+        <div id="cashflow-report-output"></div>
+      </div>
+    </section>
+
+    <section id="settings" class="tab hidden">
+      <h2>Settings</h2>
+      <label>Currency Symbol <input type="text" id="currency-symbol-setting" /></label>
+      <label>Decimal Places <input type="number" id="decimal-places" /></label>
+      <label>Date Format <input type="text" id="date-format" /></label>
+      <label>Fiscal Year Start <input type="number" id="fiscal-year-start" /></label>
+      <label>Entries/Page <input type="number" id="entries-per-page" /></label>
+      <label><input type="checkbox" id="debug-mode" /> Enable Debug</label>
+      <label><input type="checkbox" id="validate-entries" /> Strict Validation</label>
+      <button id="save-settings-btn">Save Settings</button>
+    </section>
+
+    <section id="chat" class="tab hidden">
+      <h2>Offline Chat Assistant</h2>
+      <div id="chat-log"></div>
+      <input type="text" id="chat-input" placeholder="Ask a question..." />
+      <button id="chat-btn">Send</button>
+    </section>
+  </main>
+
+  <footer>
+    <button id="export-json-btn">Export JSON</button>
+    <button id="export-csv-btn">Export CSV</button>
+    <button id="import-btn">Import File</button>
+    <input type="file" id="file-import" style="display:none" />
+    <button id="clear-data-btn">Clear All Data</button>
+  </footer>
+
+  <script src="app.js" defer></script>
+
+  <footer>
+    <p>&copy; 2025 SICK-N-tired GPT Ledger. All rights reserved.</p>
+    <p>
+      <a href="terms.html" target="_blank" rel="noopener noreferrer">Terms & Conditions</a> |
+      <a href="privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+    </p>
+  </footer>
+</body>
+</html>
